@@ -31,41 +31,15 @@ class _HealthAppState extends State<HealthApp> {
   AppState _state = AppState.DATA_NOT_FETCHED;
   int _nofSteps = 0;
 
-  // Define the types to get.
+  static final types = dataTypesAndroid;
 
-  // Use the entire list on e.g. Android.
-  static final types = dataTypesIOS;
 
-  // Or specify specific types
-  // static final types = [
-  //   HealthDataType.WEIGHT,
-  //   HealthDataType.STEPS,
-  //   HealthDataType.HEIGHT,
-  //   HealthDataType.BLOOD_GLUCOSE,
-  //   HealthDataType.WORKOUT,
-  //   HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-  //   HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-  //   // Uncomment this line on iOS - only available on iOS
-  //   // HealthDataType.AUDIOGRAM
-  // ];
-
-  // Set up corresponding permissions
-  // READ only
   final permissions = types.map((e) => HealthDataAccess.READ).toList();
 
-  // Or both READ and WRITE
-  // final permissions = types.map((e) => HealthDataAccess.READ_WRITE).toList();
-
-  // create a HealthFactory for use in the app
   HealthFactory health = HealthFactory(useHealthConnectIfAvailable: true);
 
-  /// Authorize, i.e. get permissions to access relevant health data.
   Future authorize() async {
-    // If we are trying to read Step Count, Workout, Sleep or other data that requires
-    // the ACTIVITY_RECOGNITION permission, we need to request the permission first.
-    // This requires a special request authorization call.
-    //
-    // The location permission is requested for Workouts using the Distance information.
+
     await Permission.activityRecognition.request();
     await Permission.location.request();
 
@@ -73,13 +47,11 @@ class _HealthAppState extends State<HealthApp> {
     bool? hasPermissions =
         await health.hasPermissions(types, permissions: permissions);
 
-    // hasPermissions = false because the hasPermission cannot disclose if WRITE access exists.
-    // Hence, we have to request with WRITE as well.
     hasPermissions = false;
 
     bool authorized = false;
     if (!hasPermissions) {
-      // requesting access to the data types before reading them
+
       try {
         authorized =
             await health.requestAuthorization(types, permissions: permissions);
@@ -92,11 +64,9 @@ class _HealthAppState extends State<HealthApp> {
         (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED);
   }
 
-  /// Fetch data points from the health plugin and show them in the app.
   Future fetchData() async {
     setState(() => _state = AppState.FETCHING_DATA);
 
-    // get data within the last 24 hours
     final now = DateTime.now();
     final yesterday = now.subtract(Duration(hours: 24));
 
@@ -107,7 +77,7 @@ class _HealthAppState extends State<HealthApp> {
       // fetch health data
       List<HealthDataPoint> healthData =
           await health.getHealthDataFromTypes(yesterday, now, types);
-      // save all the new data points (only the first 100)
+
       _healthDataList.addAll(
           (healthData.length < 100) ? healthData : healthData.sublist(0, 100));
     } catch (error) {
@@ -116,7 +86,7 @@ class _HealthAppState extends State<HealthApp> {
 
     // filter out duplicates
     _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-
+    print("oiawejfoiawjef" + _healthDataList[0].sourceName);
     // print the results
     _healthDataList.forEach((x) => print(x));
 
@@ -131,10 +101,6 @@ class _HealthAppState extends State<HealthApp> {
     final now = DateTime.now();
     final earlier = now.subtract(Duration(minutes: 20));
 
-    // Add data for supported types
-    // NOTE: These are only the ones supported on Androids new API Health Connect.
-    // Both Android's Google Fit and iOS' HealthKit have more types that we support in the enum list [HealthDataType]
-    // Add more - like AUDIOGRAM, HEADACHE_SEVERE etc. to try them.
     bool success = true;
     success &= await health.writeHealthData(
         1.925, HealthDataType.HEIGHT, earlier, now);
@@ -166,23 +132,7 @@ class _HealthAppState extends State<HealthApp> {
         0.0, HealthDataType.SLEEP_DEEP, earlier, now);
     success &= await health.writeMeal(
         earlier, now, 1000, 50, 25, 50, "Banana", MealType.SNACK);
-    // Store an Audiogram
-    // Uncomment these on iOS - only available on iOS
-    // const frequencies = [125.0, 500.0, 1000.0, 2000.0, 4000.0, 8000.0];
-    // const leftEarSensitivities = [49.0, 54.0, 89.0, 52.0, 77.0, 35.0];
-    // const rightEarSensitivities = [76.0, 66.0, 90.0, 22.0, 85.0, 44.5];
 
-    // success &= await health.writeAudiogram(
-    //   frequencies,
-    //   leftEarSensitivities,
-    //   rightEarSensitivities,
-    //   now,
-    //   now,
-    //   metadata: {
-    //     "HKExternalUUID": "uniqueID",
-    //     "HKDeviceName": "bluetooth headphone",
-    //   },
-    // );
 
     setState(() {
       _state = success ? AppState.DATA_ADDED : AppState.DATA_NOT_ADDED;
