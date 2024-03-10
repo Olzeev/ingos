@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "185092628754",
+    "project_id": "ingosstrakh-49b3a",
+    "storage_bucket": "ingosstrakh-49b3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185092628754:android:991282f29d455744b353cb",
+        "android_client_info": {
+          "package_name": "cachet.plugins.example_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185092628754-1ms0bjnhnrnsi9coavc1tkpfngjeggt0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cachet.plugins.example_app",
+            "certificate_hash": "76ef55692b91b7cfe44d9b9ca774c00d64899f29"
+          }
+        },
+        {
+          "client_id": "185092628754-gpm7fdds5tqnd3k5kkjriiismq5kg9pf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxRDjciG9zSr2R_-T7wG8NxSR_4emkZpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185092628754-gpm7fdds5tqnd3k5kkjriiismq5kg9pf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "185092628754-7s9ptar3on1h3oduqbdsvggpo31i0i3c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ingos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185092628754:android:b00d6ba63eca113bb353cb",
+        "android_client_info": {
+          "package_name": "com.example.ingos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185092628754-ctui6eerhtv08epmknmetlnfrffrqokd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ingos",
+            "certificate_hash": "76ef55692b91b7cfe44d9b9ca774c00d64899f29"
+          }
+        },
+        {
+          "client_id": "185092628754-gpm7fdds5tqnd3k5kkjriiismq5kg9pf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxRDjciG9zSr2R_-T7wG8NxSR_4emkZpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185092628754-gpm7fdds5tqnd3k5kkjriiismq5kg9pf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "185092628754-7s9ptar3on1h3oduqbdsvggpo31i0i3c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ingos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
