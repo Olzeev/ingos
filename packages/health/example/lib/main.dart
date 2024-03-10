@@ -65,6 +65,9 @@ class _HealthAppState extends State<HealthApp> {
   }
 
   Future fetchData() async {
+
+    await authorize();
+
     setState(() => _state = AppState.FETCHING_DATA);
 
     final now = DateTime.now();
@@ -333,13 +336,7 @@ class _HealthAppState extends State<HealthApp> {
               Wrap(
                 spacing: 10,
                 children: [
-                  TextButton(
-                      onPressed: authorize,
-                      child:
-                          Text("Auth", style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.blue))),
+
                   TextButton(
                       onPressed: fetchData,
                       child: Text("Fetch Data",
@@ -347,34 +344,7 @@ class _HealthAppState extends State<HealthApp> {
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: addData,
-                      child: Text("Add Data",
-                          style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: deleteData,
-                      child: Text("Delete Data",
-                          style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: fetchStepData,
-                      child: Text("Fetch Step Data",
-                          style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: revokeAccess,
-                      child: Text("Revoke Access",
-                          style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.blue))),
+
                 ],
               ),
               Divider(thickness: 3),
