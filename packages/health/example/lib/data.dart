@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'profile.dart';
 import 'home.dart';
 import 'settings.dart';
+import 'package:flutter/material.dart';
+import 'package:chart_sparkline/chart_sparkline.dart';
 
 
 class Data extends StatefulWidget {
@@ -135,7 +137,7 @@ class _Data extends State {
       ),
       body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 15,),
               Padding(
@@ -143,7 +145,37 @@ class _Data extends State {
                 child: Text("Пульс", style: TextStyle(fontSize: 35, color: Colors.black, fontWeight: FontWeight.w800), ),
               ),
               SizedBox(height: 15,),
+              Row(
 
+                children: [
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child:
+                    Sparkline(
+                      data: [60, 45, 65, 76, 45, 87, 67, 54, 34, 76, 87, 56, 43],
+                      lineWidth: 5.0,
+                      lineColor: Colors.red,
+                      lineGradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.red, Colors.yellow],
+                      ),
+                      fillMode: FillMode.below,
+                      fillGradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.red, Colors.yellow],
+                      ),
+                      useCubicSmoothing: true,
+                      cubicSmoothingFactor: 0.2,
+                      gridLineLabelPrecision: 2,
+                      enableGridLines: true,
+
+                    ),
+                  )
+                ]
+              )
             ],
       ),
     );
