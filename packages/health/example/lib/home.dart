@@ -16,21 +16,31 @@ class Home_page extends StatefulWidget {
 
 class _Home_page extends State {
   final user = FirebaseAuth.instance.currentUser;
-
+  List<String> monthToString = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'декабря'];
 
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     String uid = user!.uid;
     return Scaffold(
+        backgroundColor: Colors.white,
           appBar: AppBar(
+            backgroundColor: Color(0xFF1946B9),
+            iconTheme: IconThemeData(
+              color: Colors.white, // изменяем цвет иконки бургера на белый
+            ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Ингосздрав"),
+                Text("Ингосздрав",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),),
+
                 Row(
                   children: [
-                    IconButton(icon: Icon(Icons.notifications), onPressed: () { },),
+                    IconButton(icon: Icon(Icons.notifications), onPressed: () { }, color: Colors.white,),
                     IconButton(icon: Icon(Icons.person), onPressed: () {
                       Navigator.pushReplacement(
                         context,
@@ -41,7 +51,8 @@ class _Home_page extends State {
                               FadeTransition(opacity: a, child: c),
                         ),
                       );
-                    },),
+                    },
+                      color: Colors.white,),
                   ],
                 ),
               ],
@@ -54,121 +65,358 @@ class _Home_page extends State {
               SizedBox(height: 20,),
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xfffeeeff),
-                  borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(
-                    color: Color(0xffcac4d0),
-                    width: 2.0,
-                  ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.25), // Цвет тени
+                      spreadRadius: 0, // Радиус рассеивания
+                      blurRadius: 15, // Радиус размытия
+                      offset: Offset(0, 0), // Смещение тени
+                    ),
+                  ],
                 ),
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: 85,
-                child: Row(
+                height: 200,
+                child: Column(
                   children: [
-                    SizedBox(width: 20),
-                    CircleAvatar(
-                      radius: 22.0,
-                      backgroundColor: Color(0xff6750a4),
-                      child: Text(
-                        'Ш',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 25),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    SizedBox(height: 20),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Шаги", style: TextStyle(color: Colors.black, fontSize:16, fontWeight: FontWeight.w700)),
-                        SizedBox(height: 5),
-                        Text("12345", style: TextStyle(color: Colors.black, fontSize:15, fontWeight: FontWeight.w500)),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0), // Добавляем отступ только слева
+                          child:
+
+                          Text("Общее состояние", style:
+                            TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child:
+                            Text(DateTime.now().day.toString() + ' ' + monthToString[DateTime.now().month - 1],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              )),
+                        )
+
                       ],
+                    ),
+                    SizedBox(height: 10.0),
+
+                    Row(
+                        children: [
+                          SizedBox(width: 15.0),
+                          Text("20", style:
+                          TextStyle(
+                            color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+
+                          ))
+                        ]
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.82,
+                      child:
+                        LinearProgressIndicator(
+                            value: 0.2,
+                            backgroundColor: Color(0xFFFFDEDE),
+                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF7171)),
+                            minHeight: 20.0,
+                            borderRadius: BorderRadius.circular(7)
+                        )
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width * 0.82,
+                        child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("0", style:
+                            TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15,
+                            )),
+
+                            Text("100",
+                              style: TextStyle(
+                                color: Colors.grey,
+                              )),
+                          ]
+                        )
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Ваше состояние плохое",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      )
                     )
-                  ],
+                  ]
                 )
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 16),
               Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xfffeeeff),
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Color(0xffcac4d0),
-                      width: 2.0,
-                    ),
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: 85,
-                  child: Row(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child:
+                  Column(
                     children: [
-                      SizedBox(width: 20),
-                      CircleAvatar(
-                        radius: 22.0,
-                        backgroundColor: Color(0xff6750a4),
-                        child: Text(
-                          'П',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 25),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          Text("Пульс", style: TextStyle(color: Colors.black, fontSize:16, fontWeight: FontWeight.w700)),
-                          SizedBox(height: 5),
-                          Text("80", style: TextStyle(color: Colors.black, fontSize:15, fontWeight: FontWeight.w500)),
-                        ],
+                          Container(
+                            alignment: Alignment.topLeft,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.25), // Цвет тени
+                                  spreadRadius: 0, // Радиус рассеивания
+                                  blurRadius: 15, // Радиус размытия
+                                  offset: Offset(0, 0), // Смещение тени
+                                ),
+                              ],
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.5 - 28,
+                            height: 130,
+                            child:
+                            Row(
+                              children: [
+                                SizedBox(width: 15),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Image.asset('assets/images/Steps.png',
+                                      width: 60,
+                                    ),
+                                    SizedBox(height: 15),
+                                    Text("1043 шага",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w600,
+                                    ))
+
+                                  ],
+                                )
+                              ]
+                            )
+
+                          ),
+                          SizedBox(width: 16),
+                          Container(
+                              alignment: Alignment.topLeft,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.25), // Цвет тени
+                                    spreadRadius: 0, // Радиус рассеивания
+                                    blurRadius: 15, // Радиус размытия
+                                    offset: Offset(0, 0), // Смещение тени
+                                  ),
+                                ],
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.5 - 28,
+                              height: 130,
+                              child:
+                              Row(
+                                  children: [
+                                    SizedBox(width: 15),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 10),
+                                        Image.asset('assets/images/HeartRate.png',
+                                          width: 60,
+                                        ),
+                                        SizedBox(height: 15),
+                                        Text("78 уд/мин",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                        Container(
+                                            alignment: Alignment.centerRight,
+                                          width:  MediaQuery.of(context).size.width * 0.5 - 55,
+                                          child:
+                                          Text("15:37",
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                              ))
+                                        )
+
+                                      ],
+                                    )
+                                  ]
+                              )
+
+                          ),
+                        ]
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                          children: [
+                            Container(
+                                alignment: Alignment.topLeft,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.25), // Цвет тени
+                                      spreadRadius: 0, // Радиус рассеивания
+                                      blurRadius: 15, // Радиус размытия
+                                      offset: Offset(0, 0), // Смещение тени
+                                    ),
+                                  ],
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.5 - 28,
+                                height: 130,
+                                child:
+                                Row(
+                                    children: [
+                                      SizedBox(width: 15),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 10),
+                                          Image.asset('assets/images/Calories.png',
+                                            width: 60,
+                                          ),
+                                          SizedBox(height: 15),
+                                          Text("789 Ккал",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w600,
+                                              ))
+
+                                        ],
+                                      )
+                                    ]
+                                )
+
+                            ),
+                            SizedBox(width: 16),
+                            Container(
+                                alignment: Alignment.topLeft,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.25), // Цвет тени
+                                      spreadRadius: 0, // Радиус рассеивания
+                                      blurRadius: 15, // Радиус размытия
+                                      offset: Offset(0, 0), // Смещение тени
+                                    ),
+                                  ],
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.5 - 28,
+                                height: 130,
+                                child:
+                                Row(
+                                    children: [
+                                      SizedBox(width: 15),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 10),
+                                          Image.asset('assets/images/Spo2.png',
+                                            width: 60,
+                                          ),
+                                          SizedBox(height: 15),
+                                          Text("98%",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w600,
+                                              )),
+                                          Container(
+                                              alignment: Alignment.centerRight,
+                                              width:  MediaQuery.of(context).size.width * 0.5 - 55,
+                                              child:
+                                              Text("15:37",
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                  ))
+                                          )
+                                        ],
+                                      )
+                                    ]
+                                )
+
+                            ),
+                          ]
                       )
-                    ],
-                  )
+
+                    ]
+                  ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 15),
               Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xfffeeeff),
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Color(0xffcac4d0),
-                      width: 2.0,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.25), // Цвет тени
+                      spreadRadius: 0, // Распространение тени
+                      blurRadius: 15, // Размытие тени
+                      offset: Offset(0, 0), // Смещение тени
                     ),
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: 85,
-                  child: Row(
-                    children: [
-                      SizedBox(width: 20),
-                      CircleAvatar(
-                        radius: 22.0,
-                        backgroundColor: Color(0xff6750a4),
-                        child: Text(
-                          'К',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
+                  ],
+                ),
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) => Data(),
+                          transitionDuration: Duration(milliseconds: 200),
+                          transitionsBuilder: (_, a, __, c) =>
+                              FadeTransition(opacity: a, child: c),
+                        ),
+                      );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Цвет фона кнопки
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black), // Цвет текста
+                      minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width * 0.9, 45)),
+                      overlayColor: MaterialStateProperty.all<Color>(Color(0xFFF0F0F0)),
+
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20), // Радиус скругления углов
                         ),
                       ),
-                      SizedBox(width: 25),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Качество сна", style: TextStyle(color: Colors.black, fontSize:16, fontWeight: FontWeight.w700)),
-                          SizedBox(height: 5),
-                          Text("60%", style: TextStyle(color: Colors.black, fontSize:15, fontWeight: FontWeight.w500)),
-                        ],
-                      )
-                    ],
-                  )
+                    ),
+                    child:
+                    Text("Показать все данные",
+                        style: TextStyle(
+                          color: Colors.black,
+
+                        ))
+                )
               )
+
             ],
+
           )
           ),
       drawer: Drawer(

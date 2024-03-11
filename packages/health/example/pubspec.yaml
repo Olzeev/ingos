@@ -25,3 +25,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/Steps.png
+    - assets/images/HeartRate.png
+    - assets/images/Calories.png
+    - assets/images/Spo2.png
