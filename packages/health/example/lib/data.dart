@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile.dart';
@@ -17,11 +19,29 @@ class Data extends StatefulWidget {
 
 class _Data extends State {
   final user = FirebaseAuth.instance.currentUser;
+  double linePulsePosition = 0.0;
+  List<double> data_pulse = [50, 65, 76, 45, 87, 67, 120, 34, 76, 87, 56, 43];
+  List<DateTime> date_pulse = [
+    DateTime(2024, 3, 11, 12, 25),
+    DateTime(2024, 3, 11, 13, 12),
+    DateTime(2024, 3, 11, 14, 32),
+    DateTime(2024, 3, 11, 15, 54),
+    DateTime(2024, 3, 11, 16, 25),
+    DateTime(2024, 3, 11, 17, 23),
+    DateTime(2024, 3, 11, 18, 25),
+    DateTime(2024, 3, 11, 19, 54),
+    DateTime(2024, 3, 11, 20, 23),
+    DateTime(2024, 3, 11, 21, 25),
+    DateTime(2024, 3, 11, 22, 25),
+    DateTime(2024, 3, 11, 23, 25),
+  ];
+  List<String> text_pulse = [" ", " ", " "];
 
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     String uid = user!.uid;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF1946B9),
@@ -135,14 +155,13 @@ class _Data extends State {
           ],
         ),
       ),
-      body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
+
             children: [
               SizedBox(height: 15,),
               Padding(
                 padding: EdgeInsets.only(left:25),
-                child: Text("Пульс", style: TextStyle(fontSize: 35, color: Colors.black, fontWeight: FontWeight.w800), ),
+                child: Text("Пульс", style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold), ),
               ),
               SizedBox(height: 15,),
               Row(
@@ -152,30 +171,248 @@ class _Data extends State {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child:
-                    Sparkline(
-                      data: [60, 45, 65, 76, 45, 87, 67, 54, 34, 76, 87, 56, 43],
-                      lineWidth: 5.0,
-                      lineColor: Colors.red,
-                      lineGradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.red, Colors.yellow],
-                      ),
-                      fillMode: FillMode.below,
-                      fillGradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.red, Colors.yellow],
-                      ),
-                      useCubicSmoothing: true,
-                      cubicSmoothingFactor: 0.2,
-                      gridLineLabelPrecision: 2,
-                      enableGridLines: true,
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTapDown: (details){
+                                setState(() {
+                                  // Позиция линии будет устанавливаться на середину контейнера по оси X
+                                  double cont_size = MediaQuery.of(context).size.width * 0.9 - 15;
+                                  double delta = (cont_size / (data_pulse.length - 1));
+                                  linePulsePosition = ((details.localPosition.dx / cont_size * (data_pulse.length - 1)).round() * delta).toDouble();
+                                  int ind = (details.localPosition.dx / cont_size * (data_pulse.length - 1)).round();
+                                  text_pulse = [
+                                    data_pulse[ind].toInt().toString(),
+                                    date_pulse[ind].day.toString().padLeft(2, '0') + '.' + date_pulse[ind].month.toString().padLeft(2, '0'),
+                                    date_pulse[ind].hour.toString() + ':' + date_pulse[ind].minute.toString().padLeft(2, '0')
+                                  ];
+                                });
+                              },
+                              child:
+                                Stack(
+                                  children: [
+                                    Sparkline(
+                                      data: data_pulse,
+                                      lineWidth: 3.0,
+                                      lineColor: Color(0xffff6666),
 
-                    ),
+                                      fillMode: FillMode.below,
+                                      fillGradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [Color(0x96eb4034),
+                                          Color(0x96ffffff)],
+                                      ),
+                                      //useCubicSmoothing: true,
+                                      //cubicSmoothingFactor: 0.1,
+                                      //gridLineLabelPrecision: 3,
+                                      enableGridLines: true,
+
+                                    ),
+
+                                    AnimatedPositioned(
+                                      duration: Duration(milliseconds: 200),
+                                      curve: Curves.easeInOut,
+                                      left: linePulsePosition,
+
+                                      top: 0,
+                                      bottom: 0,
+                                      child:
+                                      Container(
+                                        width: 2,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ]
+                                ),
+
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 60,
+                              child:
+                                Stack(
+                                    children: [
+                                      AnimatedPositioned(
+                                        duration: Duration(milliseconds: 200),
+                                        curve: Curves.easeInOut,
+                                        left: linePulsePosition - 34,
+                                        top: 0,
+                                        child:
+                                            Column(
+                                            children: [
+                                              Text(
+                                                  text_pulse[0].toString() + ' уд/мин',
+                                                  textAlign: TextAlign.center,
+
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold ,
+
+                                                  )
+                                              ),
+                                              Text(
+                                                  text_pulse[1],
+                                                  textAlign: TextAlign.center,
+
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.bold,
+                                                      height: 1.5,
+                                                  )
+                                              ),
+                                              Text(
+                                                  text_pulse[2],
+                                                  textAlign: TextAlign.center,
+
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.bold,
+                                                    height: 1.5,
+                                                  )
+                                              )
+                                            ],
+                                            )
+
+                                      ),
+                                    ]
+                                ),
+
+                            ),
+
+                          ]
+                        )
                   )
                 ]
-              )
+              ),
+              SizedBox(height: 15,),
+              Padding(
+                padding: EdgeInsets.only(left:25),
+                child: Text("Шаги", style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold), ),
+              ),
+              SizedBox(height: 15,),
+              Row(
+                  children: [
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                    Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child:
+                        Column(
+                            children: [
+                              GestureDetector(
+                                onTapDown: (details){
+                                  setState(() {
+                                    double cont_size = MediaQuery.of(context).size.width * 0.9 - 15;
+                                    double delta = (cont_size / (data_pulse.length - 1));
+                                    linePulsePosition = ((details.localPosition.dx / cont_size * (data_pulse.length - 1)).round() * delta).toDouble();
+                                    int ind = (details.localPosition.dx / cont_size * (data_pulse.length - 1)).round();
+                                    text_pulse = [
+                                      data_pulse[ind].toInt().toString(),
+                                      date_pulse[ind].day.toString().padLeft(2, '0') + '.' + date_pulse[ind].month.toString().padLeft(2, '0'),
+                                      date_pulse[ind].hour.toString() + ':' + date_pulse[ind].minute.toString().padLeft(2, '0')
+                                    ];
+                                  });
+                                },
+                                child:
+                                Stack(
+                                    children: [
+                                      Sparkline(
+                                        data: data_pulse,
+                                        lineWidth: 3.0,
+                                        lineColor: Color(0xffff6666),
+
+                                        fillMode: FillMode.below,
+                                        fillGradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [Color(0x96eb4034),
+                                            Color(0x96ffffff)],
+                                        ),
+                                        //useCubicSmoothing: true,
+                                        //cubicSmoothingFactor: 0.1,
+                                        //gridLineLabelPrecision: 3,
+                                        enableGridLines: true,
+
+                                      ),
+
+                                      AnimatedPositioned(
+                                        duration: Duration(milliseconds: 200),
+                                        curve: Curves.easeInOut,
+                                        left: linePulsePosition,
+
+                                        top: 0,
+                                        bottom: 0,
+                                        child:
+                                        Container(
+                                          width: 2,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ]
+                                ),
+
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height: 60,
+                                child:
+                                Stack(
+                                    children: [
+                                      AnimatedPositioned(
+                                          duration: Duration(milliseconds: 200),
+                                          curve: Curves.easeInOut,
+                                          left: linePulsePosition - 34,
+                                          top: 0,
+                                          child:
+                                          Column(
+                                            children: [
+                                              Text(
+                                                  text_pulse[0].toString() + ' уд/мин',
+                                                  textAlign: TextAlign.center,
+
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold ,
+
+                                                  )
+                                              ),
+                                              Text(
+                                                  text_pulse[1],
+                                                  textAlign: TextAlign.center,
+
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold,
+                                                    height: 1.5,
+                                                  )
+                                              ),
+                                              Text(
+                                                  text_pulse[2],
+                                                  textAlign: TextAlign.center,
+
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold,
+                                                    height: 1.5,
+                                                  )
+                                              )
+                                            ],
+                                          )
+
+                                      ),
+                                    ]
+                                ),
+
+                              ),
+
+
+                            ]
+                        )
+                    )
+                  ]
+              ),
+
+
             ],
       ),
     );
