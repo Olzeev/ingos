@@ -85,6 +85,7 @@ class _Data extends State {
   Future getCal() async {
     final now = DateTime.now();
     DateTime startdata = DateTime(now.year, now.month, now.day).subtract(Duration(days: 14));
+
     for (int i = 0; i < 14; i++) {
       DateTime endSteps = startdata.add(Duration(days: 1)).isBefore(now) ? startdata.add(Duration(days: 1)) : now;
       List<HealthDataPoint> healthDataCal = await health.getHealthDataFromTypes(startdata, endSteps, [HealthDataType.WORKOUT]);
@@ -129,7 +130,7 @@ class _Data extends State {
     _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
     //print("oiawejfoiawjef" + _healthDataList[0].sourceName);
     // print the results
-    _healthDataList.forEach((x) => print(x));
+    //_healthDataList.forEach((x) => print(x));
 
     // update the UI to display the results
     setState(() {
@@ -188,7 +189,19 @@ class _Data extends State {
     );
   }
 
+  void clear_all(){
+    data_steps.clear();
+    date_steps.clear();
+    data_pulse.clear();
+    date_pulse.clear();
+    data_blood.clear();
+    date_blood.clear();
+    data_cal.clear();
+    date_cal.clear();
+  }
+
   Future<void> _refreshData() async {
+    clear_all();
     fetchData();
     fetchStepData();
     getCal();
@@ -321,7 +334,10 @@ class _Data extends State {
           ],
         ),
       ),
-      body: ListView(
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+      child:
+      ListView(
             children: [
               SizedBox(height: 15,),
               Padding(
@@ -997,6 +1013,7 @@ class _Data extends State {
               SizedBox(height: 50),
             ],
       ),
+    )
     );
   }
 }
