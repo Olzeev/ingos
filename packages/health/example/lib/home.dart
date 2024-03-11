@@ -109,12 +109,14 @@ class _Home_page extends State {
     _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
     //print("oiawejfoiawjef" + _healthDataList[0].sourceName);
     // print the results
-    _healthDataList.forEach((x) => print(x));
+    //_healthDataList.forEach((x) => print(x));
 
     // update the UI to display the results
     setState(() {
       _state = _healthDataList.isEmpty ? AppState.NO_DATA : AppState.DATA_READY;
     });
+    cal = 0;
+    distance = 0;
     for (int i = 0; i < _healthDataList.length; i++) {
       if (_healthDataList[i].typeString == "HEART_RATE") {
         heart_value = _healthDataList[i].value.toString();
@@ -236,8 +238,14 @@ class _Home_page extends State {
               ],
             ),
           ),
-          body: Center(
-            child: Column(
+          body:
+            RefreshIndicator(
+              onRefresh: _refreshData,
+              child:
+            Center(
+            child: ListView(
+              children: [
+              Column(
               mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 20,),
@@ -621,8 +629,10 @@ class _Home_page extends State {
               )
             ],
 
-          )
+          )]
+            )
           ),
+            ),
       drawer: Drawer(
         child: ListView(
           children: [
