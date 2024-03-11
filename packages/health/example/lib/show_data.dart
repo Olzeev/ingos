@@ -26,10 +26,12 @@ enum AppState {
   STEPS_READY,
 }
 
+int nofSteps = 0;
+
 class _HealthAppState extends State<HealthApp> {
   List<HealthDataPoint> _healthDataList = [];
   AppState _state = AppState.DATA_NOT_FETCHED;
-  int _nofSteps = 0;
+  int nofSteps = 0;
 
   static final types = dataTypesAndroid;
 
@@ -182,7 +184,7 @@ class _HealthAppState extends State<HealthApp> {
       print('Total number of steps: $steps');
 
       setState(() {
-        _nofSteps = (steps == null) ? 0 : steps;
+        nofSteps = (steps == null) ? 0 : steps;
         _state = (steps == null) ? AppState.NO_DATA : AppState.STEPS_READY;
       });
     } else {
@@ -287,7 +289,7 @@ class _HealthAppState extends State<HealthApp> {
   }
 
   Widget _stepsFetched() {
-    return Text('Total number of steps: $_nofSteps');
+    return Text('Total number of steps: $nofSteps');
   }
 
   Widget _dataNotAdded() {
