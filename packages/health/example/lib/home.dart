@@ -8,7 +8,7 @@ import 'dart:async';
 import 'package:health/health.dart';
 import 'package:health_example/util.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:intl/intl.dart';
 
 
 class Home_page extends StatefulWidget {
@@ -45,7 +45,9 @@ class _Home_page extends State {
   String heart_value = '-';
   int cal = 0;
   double blood = 0.0;
-
+  String heart_value_time = '';
+  String blood_time = '';
+  double distance = 0;
 
   static final types = dataTypesAndroid;
 
@@ -98,14 +100,14 @@ class _Home_page extends State {
       await health.getHealthDataFromTypes(midnight, now, types);
 
       _healthDataList.addAll(
-          (healthData.length < 100) ? healthData : healthData.sublist(0, 100));
+          (healthData.length < 1000) ? healthData : healthData.sublist(0, 1000));
     } catch (error) {
       print("Exception in getHealthDataFromTypes: $error");
     }
 
     // filter out duplicates
     _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-    print("oiawejfoiawjef" + _healthDataList[0].sourceName);
+    //print("oiawejfoiawjef" + _healthDataList[0].sourceName);
     // print the results
     _healthDataList.forEach((x) => print(x));
 
@@ -116,12 +118,17 @@ class _Home_page extends State {
     for (int i = 0; i < _healthDataList.length; i++) {
       if (_healthDataList[i].typeString == "HEART_RATE") {
         heart_value = _healthDataList[i].value.toString();
+        heart_value_time = DateFormat('HH:mm').format(_healthDataList[i].dateFrom);
       }
       if (_healthDataList[i].typeString == "WORKOUT") {
         cal += int.parse((_healthDataList[i].value as WorkoutHealthValue).totalEnergyBurned.toString());
       }
       if (_healthDataList[i].typeString == "BLOOD_OXYGEN") {
         blood = double.parse(_healthDataList[i].value.toString());
+        blood_time = DateFormat('HH:mm').format(_healthDataList[i].dateFrom);
+      }
+      if (_healthDataList[i].typeString == "DISTANCE_DELTA") {
+        distance += double.parse(_healthDataList[i].value.toString());
       }
     }
   }
@@ -269,7 +276,7 @@ class _Home_page extends State {
                         Padding(
                           padding: const EdgeInsets.only(right: 15.0),
                           child:
-                            Text(DateTime.now().add(Duration(hours: 3)).day.toString() + ' ' + monthToString[DateTime.now().add(Duration(hours: 3)).month - 1],
+                            Text(DateTime.now().day.toString() + ' ' + monthToString[DateTime.now().month - 1],
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 color: Colors.grey,
@@ -370,13 +377,24 @@ class _Home_page extends State {
                                     Image.asset('assets/images/Steps.png',
                                       width: 60,
                                     ),
-                                    SizedBox(height: 15),
+                                    SizedBox(height: 10),
                                     Text("$nofSteps шага",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 17,
                                       fontWeight: FontWeight.w600,
-                                    ))
+                                    )),
+                                    Container(
+                                        alignment: Alignment.centerLeft,
+                                        width:  MediaQuery.of(context).size.width * 0.5 - 55,
+                                        child:
+                                        Text('${(distance / 1000.0).toStringAsFixed(2)} км',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ))
+                                    )
 
                                   ],
                                 )
@@ -404,7 +422,7 @@ class _Home_page extends State {
                               child:
                               Row(
                                   children: [
-                                    SizedBox(width: 15),
+                                    SizedBox(width: 10),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -412,7 +430,7 @@ class _Home_page extends State {
                                         Image.asset('assets/images/HeartRate.png',
                                           width: 60,
                                         ),
-                                        SizedBox(height: 15),
+                                        SizedBox(height: 10),
                                         Text("$heart_value уд/мин",
                                             style: TextStyle(
                                               color: Colors.black,
@@ -423,7 +441,7 @@ class _Home_page extends State {
                                             alignment: Alignment.centerRight,
                                           width:  MediaQuery.of(context).size.width * 0.5 - 55,
                                           child:
-                                          Text("15:37",
+                                          Text(heart_value_time,
                                               style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 12,
@@ -461,7 +479,7 @@ class _Home_page extends State {
                                 child:
                                 Row(
                                     children: [
-                                      SizedBox(width: 15),
+                                      SizedBox(width: 10),
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -522,7 +540,7 @@ class _Home_page extends State {
                                               alignment: Alignment.centerRight,
                                               width:  MediaQuery.of(context).size.width * 0.5 - 55,
                                               child:
-                                              Text("15:37",
+                                              Text(blood_time,
                                                   style: TextStyle(
                                                     color: Colors.grey,
                                                     fontSize: 12,

@@ -84,7 +84,7 @@ class _HealthAppState extends State<HealthApp> {
           await health.getHealthDataFromTypes(yesterday, now, types);
 
       _healthDataList.addAll(
-          (healthData.length < 100) ? healthData : healthData.sublist(0, 100));
+          (healthData.length < 1000) ? healthData : healthData.sublist(0, 1000));
     } catch (error) {
       print("Exception in getHealthDataFromTypes: $error");
     }
