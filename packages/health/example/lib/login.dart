@@ -27,6 +27,24 @@ class _Login extends State {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Color(0xFF1946B9),
+        iconTheme: IconThemeData(
+          color: Colors.white, // изменяем цвет иконки бургера на белый
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Ингосздрав",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),),
+
+
+          ],
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -101,7 +119,20 @@ class _Login extends State {
               child: CustomDateField(),
             ),
             SizedBox(height: 30,),
-            ElevatedButton(
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black38, // Цвет тени
+                    spreadRadius: 0, // Радиус рассеивания
+                    blurRadius: 10, // Радиус размытия
+                    offset: Offset(0, 5), // Смещение тени
+                  ),
+                ],
+              ),
+              child:
+              TextButton(
               onPressed: () {
                 String uid = user!.uid;
                 String? mail = user!.email;
@@ -129,24 +160,23 @@ class _Login extends State {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.person_outline, color: Color(0xff6750a4),),
-                  Text("Зарегистрироваться", textAlign: TextAlign.center, style: TextStyle(color: Color(
-                      0xff6750a4), fontSize: 16, fontWeight: FontWeight.w600),),
+                  Icon(Icons.person_outline, color: Colors.white),
+                  Text("Зарегистрироваться", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),),
                 ],
               ),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                minimumSize: Size(MediaQuery.of(context).size.width * 0.75, 45),
-                maximumSize: Size(MediaQuery.of(context).size.width * 0.75, 45),
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  side: BorderSide(
-                    color: Color(0xff79747e),
-                    width: 1.0,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF1946B9)), // Цвет фона кнопки
+                  overlayColor: MaterialStateProperty.all<Color>(Color(0xFF617aba)),
+                  minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width * 0.75, 50)),
+                  maximumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width * 0.75, 50)),
+
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20), // Радиус скругления углов
+                    ),
                   ),
                 ),
-              ),
+            ),
             ),
           ],
         )
