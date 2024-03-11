@@ -41,13 +41,22 @@ class _Profile extends State<Profile> {
 
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFF1946B9),
+          iconTheme: IconThemeData(
+            color: Colors.white, // изменяем цвет иконки бургера на белый
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Личный кабинет"),
+              Text("Личный кабинет",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),),
+
               Row(
                 children: [
-                  IconButton(icon: Icon(Icons.notifications), onPressed: () { },),
+                  IconButton(icon: Icon(Icons.notifications), onPressed: () { }, color: Colors.white,),
                   IconButton(icon: Icon(Icons.person), onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -58,7 +67,8 @@ class _Profile extends State<Profile> {
                             FadeTransition(opacity: a, child: c),
                       ),
                     );
-                  },),
+                  },
+                    color: Colors.white,),
                 ],
               ),
             ],
@@ -72,10 +82,14 @@ class _Profile extends State<Profile> {
                 accountEmail: Text(user!.email.toString()),
                 currentAccountPicture: CircleAvatar(
                   child: Text(user!.displayName.toString()[0], style: TextStyle(color: Color(
-                      0xff092360), fontWeight: FontWeight.w800, fontSize: 32),),
+                      0xff1946B9), fontWeight: FontWeight.w800, fontSize: 32),),
                   backgroundColor: Colors.white,
                 ),
+                decoration: BoxDecoration(
+                  color: Color(0xff1946B9), // Цвет заднего фона
+                ),
               ),
+
               ListTile(
                 title: Text('Главная'),
                 onTap: () {
@@ -220,73 +234,70 @@ class _Profile extends State<Profile> {
                   .data as DocumentSnapshot)['Дата рождения'].toDate()),
             ),
             SizedBox(height: 30,),
-            ElevatedButton(
-              onPressed: () {
-                String uid = user!.uid;
-                String? mail = user!.email;
-                FirebaseFirestore.instance
-                    .collection("Users")
-                    .doc(uid)
-                    .set({
-                  "Имя": name,
-                  "Фамилия": surname,
-                  "Отчество": thirdname != '' ? thirdname : (snapshot
-                      .data as DocumentSnapshot)['Отчество'],
-                  "mail": mail,
-                  "number_insurance": (snapshot
-                      .data as DocumentSnapshot)['number_insurance'],
-                  "Дата рождения": selectedDate != DateTime(1999) ? selectedDate : (snapshot
-                      .data as DocumentSnapshot)['Дата рождения'].toDate(),
-                });
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) => Home_page(),
-                    transitionDuration: Duration(milliseconds: 300),
-                    transitionsBuilder: (_, a, __, c) =>
-                        FadeTransition(opacity: a, child: c),
-                  ),
-                );
-              },
-              child: Text("Сохранить", textAlign: TextAlign.center, style: TextStyle(color: Color(
-                  0xff1d192b), fontSize: 16, fontWeight: FontWeight.w600),),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xfff9dedc),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                minimumSize: Size(MediaQuery.of(context).size.width * 0.85, 45),
-                maximumSize: Size(MediaQuery.of(context).size.width * 0.85, 45),
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  side: BorderSide(
-                    color: Color(0xfff9dedc),
-                    width: 1.0,
+
+              TextButton(
+                onPressed: () {
+                  String uid = user!.uid;
+                  String? mail = user!.email;
+                  FirebaseFirestore.instance
+                      .collection("Users")
+                      .doc(uid)
+                      .set({
+                    "Имя": name,
+                    "Фамилия": surname,
+                    "Отчество": thirdname != '' ? thirdname : (snapshot
+                        .data as DocumentSnapshot)['Отчество'],
+                    "mail": mail,
+                    "number_insurance": (snapshot
+                        .data as DocumentSnapshot)['number_insurance'],
+                    "Дата рождения": selectedDate != DateTime(1999) ? selectedDate : (snapshot
+                        .data as DocumentSnapshot)['Дата рождения'].toDate(),
+                  });
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) => Home_page(),
+                      transitionDuration: Duration(milliseconds: 300),
+                      transitionsBuilder: (_, a, __, c) =>
+                          FadeTransition(opacity: a, child: c),
+                    ),
+                  );
+                },
+                child: Text("Сохранить", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF1946B9)), // Цвет фона кнопки
+
+                  minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width * 0.9, 45)),
+                  overlayColor: MaterialStateProperty.all<Color>(Color(0xFF607BB7)),
+
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20), // Радиус скругления углов
+                    ),
                   ),
                 ),
               ),
-            ),
           ],),),
-            ElevatedButton(
+
+
+          TextButton(
               onPressed: () {
                 signOut();
               },
-              child: Text("Выйти", textAlign: TextAlign.center, style: TextStyle(color: Color(
-                  0xff1d192b), fontSize: 16, fontWeight: FontWeight.w600),),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xfff9dedc),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                minimumSize: Size(MediaQuery.of(context).size.width * 0.85, 45),
-                maximumSize: Size(MediaQuery.of(context).size.width * 0.85, 45),
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  side: BorderSide(
-                    color: Color(0xfff9dedc),
-                    width: 1.0,
+              child: Text("Выйти", textAlign: TextAlign.center, style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w600),),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Цвет фона кнопки
+                side: MaterialStateProperty.all(BorderSide(color: Colors.red, width: 2)),
+                minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width * 0.9, 45)),
+                overlayColor: MaterialStateProperty.all<Color>(Color(0xFF607BB7)),
+
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20), // Радиус скругления углов
                   ),
                 ),
               ),
-            ),
+              ),
             SizedBox(height: 40,),
           ],
         ),

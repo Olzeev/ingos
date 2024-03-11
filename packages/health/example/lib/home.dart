@@ -366,7 +366,6 @@ class _Home_page extends State {
                             ),
                           ]
                       )
-
                     ]
                   ),
               ),
@@ -413,8 +412,23 @@ class _Home_page extends State {
 
                         ))
                 )
-              )
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
 
+                    children: [
+                      Image.asset('assets/images/logo.png',
+                        width: 60,
+                      ),
+                      Text(
+                        'Университетская гимназия МГУ им. М.В.Ломоносова',
+                        style: TextStyle(fontSize: 15),
+                      )
+                    ]
+
+                ),
+              )
             ],
 
           )
@@ -427,8 +441,11 @@ class _Home_page extends State {
               accountEmail: Text(user!.email.toString()),
               currentAccountPicture: CircleAvatar(
                 child: Text(user!.displayName.toString()[0], style: TextStyle(color: Color(
-                    0xff092360), fontWeight: FontWeight.w800, fontSize: 32),),
+                    0xff1946B9), fontWeight: FontWeight.w800, fontSize: 32),),
                 backgroundColor: Colors.white,
+              ),
+              decoration: BoxDecoration(
+                color: Color(0xff1946B9), // Цвет заднего фона
               ),
             ),
             ListTile(
@@ -491,8 +508,10 @@ class _Home_page extends State {
                 );
               },
             ),
+
           ],
         ),
+
       ),
     );
   }

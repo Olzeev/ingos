@@ -22,13 +22,22 @@ class _Data extends State {
     String uid = user!.uid;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF1946B9),
+        iconTheme: IconThemeData(
+          color: Colors.white, // изменяем цвет иконки бургера на белый
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Данные"),
+            Text("Данные",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),),
+
             Row(
               children: [
-                IconButton(icon: Icon(Icons.notifications), onPressed: () { },),
+                IconButton(icon: Icon(Icons.notifications), onPressed: () { }, color: Colors.white,),
                 IconButton(icon: Icon(Icons.person), onPressed: () {
                   Navigator.pushReplacement(
                     context,
@@ -39,7 +48,8 @@ class _Data extends State {
                           FadeTransition(opacity: a, child: c),
                     ),
                   );
-                },),
+                },
+                  color: Colors.white,),
               ],
             ),
           ],
@@ -53,8 +63,11 @@ class _Data extends State {
               accountEmail: Text(user!.email.toString()),
               currentAccountPicture: CircleAvatar(
                 child: Text(user!.displayName.toString()[0], style: TextStyle(color: Color(
-                    0xff092360), fontWeight: FontWeight.w800, fontSize: 32),),
+                    0xff1946B9), fontWeight: FontWeight.w800, fontSize: 32),),
                 backgroundColor: Colors.white,
+              ),
+              decoration: BoxDecoration(
+                color: Color(0xff1946B9), // Цвет заднего фона
               ),
             ),
             ListTile(
@@ -130,7 +143,7 @@ class _Data extends State {
                 child: Text("Пульс", style: TextStyle(fontSize: 35, color: Colors.black, fontWeight: FontWeight.w800), ),
               ),
               SizedBox(height: 15,),
-              Image.asset('puls.png', width: MediaQuery.of(context).size.width * 0.92,),
+
             ],
       ),
     );
