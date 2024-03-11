@@ -220,7 +220,7 @@ class _Home_page extends State {
 
                 Row(
                   children: [
-                    IconButton(icon: Icon(Icons.notifications), onPressed: () { }, color: Colors.white,),
+
                     IconButton(icon: Icon(Icons.person), onPressed: () {
                       Navigator.pushReplacement(
                         context,

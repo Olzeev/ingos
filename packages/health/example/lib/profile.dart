@@ -161,9 +161,10 @@ class _Profile extends State<Profile> {
         Column (
           children: [
             Expanded(
-              child: Column(
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 30),
           children: [
-            SizedBox(height: 110,),
+            SizedBox(height: 50),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: 50,
@@ -179,7 +180,7 @@ class _Profile extends State<Profile> {
                 },
               ),
             ),
-            SizedBox(height: 25,),
+            SizedBox(height: 20,),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: 50,
@@ -195,7 +196,7 @@ class _Profile extends State<Profile> {
                 },
               ),
             ),
-            SizedBox(height: 25,),
+            SizedBox(height: 20,),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: 50,
@@ -212,7 +213,7 @@ class _Profile extends State<Profile> {
                 },
               ),
             ),
-            SizedBox(height: 25,),
+            SizedBox(height: 20,),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
               height: 50,
@@ -227,13 +228,14 @@ class _Profile extends State<Profile> {
                     .data as DocumentSnapshot)['number_insurance'],
               ),
             ),
-            SizedBox(height: 25,),
+            SizedBox(height: 20,),
             Container(
               width: MediaQuery.of(context).size.width * 0.85,
+              height: 60,
               child: CustomDateField(date: (snapshot
                   .data as DocumentSnapshot)['Дата рождения'].toDate()),
             ),
-            SizedBox(height: 30,),
+            SizedBox(height: 20,),
 
               TextButton(
                 onPressed: () {
@@ -279,26 +281,28 @@ class _Profile extends State<Profile> {
               ),
           ],),),
 
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20), // Отступы от краев
+            child:
+            TextButton(
+                onPressed: () {
+                  signOut();
+                },
+                child: Text("Выйти", textAlign: TextAlign.center, style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w600),),
+                style: ButtonStyle(
+                  //backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Цвет фона кнопки
+                  side: MaterialStateProperty.all(BorderSide(color: Colors.red, width: 2)),
+                  minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width * 0.9, 45)),
+                  overlayColor: MaterialStateProperty.all<Color>(Color(0xFF607BB7)),
 
-          TextButton(
-              onPressed: () {
-                signOut();
-              },
-              child: Text("Выйти", textAlign: TextAlign.center, style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w600),),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Цвет фона кнопки
-                side: MaterialStateProperty.all(BorderSide(color: Colors.red, width: 2)),
-                minimumSize: MaterialStateProperty.all<Size>(Size(MediaQuery.of(context).size.width * 0.9, 45)),
-                overlayColor: MaterialStateProperty.all<Color>(Color(0xFF607BB7)),
-
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // Радиус скругления углов
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20), // Радиус скругления углов
+                    ),
                   ),
                 ),
-              ),
-              ),
-            SizedBox(height: 40,),
+                ),
+            )
           ],
         ),
     );
