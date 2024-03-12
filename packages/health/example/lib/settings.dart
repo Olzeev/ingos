@@ -5,7 +5,8 @@ import 'profile.dart';
 import 'home.dart';
 import 'show_data.dart';
 import 'data.dart';
-
+import 'dart:async';
+import 'package:url_launcher/url_launcher.dart'; // Пакет для открытия ссылок
 
 class SettingsApp extends StatefulWidget {
   const SettingsApp({Key, key}): super(key: key);
@@ -149,7 +150,7 @@ class _SettingsApp extends State {
                   ),
                 );
               },
-              child: Text("Перейти в Google Fit", textAlign: TextAlign.center, style: TextStyle(color: Color(
+              child: Text("Google Fit Page", textAlign: TextAlign.center, style: TextStyle(color: Color(
                   0xff000000), fontSize: 16, fontWeight: FontWeight.w700),),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xffeaddff),
@@ -165,6 +166,104 @@ class _SettingsApp extends State {
                   ),
                 ),
               ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () async {
+                await canLaunchUrl(
+                Uri.parse("market://launch?id=com.google.android.apps.fitness"),
+                )
+                //if we can launch the url then open the app
+                    ? await launchUrl(
+                  Uri.parse("market://launch?id=com.google.android.apps.fitness"),
+                )
+                //if we cannot, then open a link to the playstore so the user downloads the app
+                    : await launchUrl(
+                Uri.parse(
+                "https://play.google.com/store/apps/details?id=com.google.android.apps.fitness"),
+                );
+
+              },
+              child:Container(
+                width: MediaQuery.of(context).size.width * 0.85,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.white, // Цвет контейнера
+                  borderRadius: BorderRadius.circular(20), // Радиус углов контейнера
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // Цвет тени
+                      spreadRadius: 0, // Радиус рассеивания тени
+                      blurRadius: 15, // Радиус размытия тени
+                      offset: Offset(0, 0), // Смещение тени
+                    ),
+                  ],
+                ),
+                child:
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child:
+                    Text(
+                      textAlign: TextAlign.center,
+                      'Google Fit',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
+                      ),
+                    ),
+                )
+              )
+
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+                onTap: () async {
+                  await canLaunchUrl(
+                    Uri.parse("market://launch?id=com.google.android.apps.healthdata"),
+                  )
+                  //if we can launch the url then open the app
+                      ? await launchUrl(
+                    Uri.parse("market://launch?id=com.google.android.apps.healthdata"),
+                  )
+                  //if we cannot, then open a link to the playstore so the user downloads the app
+                      : await launchUrl(
+                    Uri.parse(
+                        "https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata"),
+                  );
+
+                },
+                child:Container(
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Цвет контейнера
+                      borderRadius: BorderRadius.circular(20), // Радиус углов контейнера
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5), // Цвет тени
+                          spreadRadius: 0, // Радиус рассеивания тени
+                          blurRadius: 15, // Радиус размытия тени
+                          offset: Offset(0, 0), // Смещение тени
+                        ),
+                      ],
+                    ),
+                    child:
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child:
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Health Connect',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                        ),
+                      ),
+                    )
+                )
+
             ),
           ],
         )
