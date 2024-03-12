@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 
 DateTime selectedDate = DateTime(2000);
 
@@ -13,7 +15,10 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State {
-
+  bool _isChecked1 = false;
+  bool _hasError1 = false;
+  bool _isChecked2 = false;
+  bool _hasError2 = false;
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -23,7 +28,12 @@ class _Login extends State {
     var surname = user!.displayName?.split(' ')[1];
     var thirdname = '';
 
-
+    Future<String> _loadText1Asset() async {
+      return await rootBundle.loadString('assets/text_files/consent_to_the_processing_of_personal_data.txt');
+    }
+    Future<String> _loadText2Asset() async {
+      return await rootBundle.loadString('assets/text_files/consent_to_the_processing_of_medical_data.txt');
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -118,6 +128,186 @@ class _Login extends State {
               width: MediaQuery.of(context).size.width * 0.75,
               child: CustomDateField(),
             ),
+            SizedBox(height: 30),
+            Stack(
+              children: [
+                _hasError1 ? Row(
+                    children: [
+                      SizedBox(width: 40),
+                      Container(
+                        width: 250,
+                        height: 45,
+                        margin: EdgeInsets.only(top: 2),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), // Закругление углов
+                          border: Border.all(
+                            color: Colors.red, // Цвет границы
+                            width: 2, // Толщина границы
+                          ),
+                        ),
+                      )
+                    ])
+                    : Container(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                    Checkbox(
+                      value: _isChecked1,
+                      isError: _hasError1,
+                      onChanged: (newValue) {
+
+                        setState(() {
+                          _hasError1 = false;
+                          _isChecked1 = newValue!;
+                        });
+                      },
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Я даю ',
+                        style: TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'согласие на обработку \nперсональных данных.',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Colors.blue,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title: Text("Согласие на обработку персональных данных"),
+                                      content: Scrollbar(
+                                        child: SingleChildScrollView(
+                                          child: FutureBuilder(
+                                            future: _loadText1Asset(),
+                                            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Text(snapshot.data!);
+                                              } else {
+                                                return CircularProgressIndicator();
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Закрыть"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 80)
+                  ],
+                ),
+              ],
+            ),
+
+            Stack(
+              children: [
+                _hasError2 ? Row(
+                    children: [
+                      SizedBox(width: 40),
+                      Container(
+                        width: 250,
+                        height: 45,
+                        margin: EdgeInsets.only(top: 2),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), // Закругление углов
+                          border: Border.all(
+                            color: Colors.red, // Цвет границы
+                            width: 2, // Толщина границы
+                          ),
+                        ),
+                      )
+                    ])
+                    : Container(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                    Checkbox(
+                      value: _isChecked2,
+                      isError: _hasError2,
+                      onChanged: (newValue) {
+
+                        setState(() {
+                          _isChecked2 = newValue!;
+                          _hasError2 = false;
+                        });
+                      },
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Я даю ',
+                        style: TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'согласие на обработку \nмедицинских данных.',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Colors.blue,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title: Text("Согласие на обработку медицинских данных"),
+                                      content: Scrollbar(
+                                        child: SingleChildScrollView(
+                                          child: FutureBuilder(
+                                            future: _loadText2Asset(),
+                                            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Text(snapshot.data!);
+                                              } else {
+                                                return CircularProgressIndicator();
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Закрыть"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 80)
+                  ],
+                ),
+
+              ],
+            ),
+
             SizedBox(height: 30,),
             Container(
               decoration: BoxDecoration(
@@ -134,6 +324,14 @@ class _Login extends State {
               child:
               TextButton(
               onPressed: () {
+                if (!_isChecked1 || !_isChecked2){
+                  setState((){
+
+                    if (!_isChecked1) _hasError1 = true;
+                    if (!_isChecked2) _hasError2 = true;
+                  });
+                  return;
+                }
                 String uid = user!.uid;
                 String? mail = user!.email;
                 FirebaseFirestore.instance

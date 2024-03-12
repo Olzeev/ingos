@@ -34,3 +34,5 @@ flutter:
     - assets/images/Calories.png
     - assets/images/Spo2.png
     - assets/images/logo.png
+    - assets/text_files/consent_to_the_processing_of_personal_data.txt
+    - assets/text_files/consent_to_the_processing_of_medical_data.txt

@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
 
 
+
 class Home_page extends StatefulWidget {
   const Home_page({Key, key}): super(key: key);
 
@@ -610,6 +611,7 @@ class _Home_page extends State {
                         ))
                 )
               ),
+
               SizedBox(height: 100,),
               Align(
                 alignment: Alignment.bottomCenter,
