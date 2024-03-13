@@ -91,7 +91,7 @@ class _Data extends State {
       List<HealthDataPoint> healthDataCal = await health.getHealthDataFromTypes(startdata, endSteps, [HealthDataType.WORKOUT]);
       double data_cal_delta = 0.0;
       for (int j = 0; j < healthDataCal.length; j++) {
-        data_cal_delta += double.parse((_healthDataList[i].value as WorkoutHealthValue).totalEnergyBurned.toString());
+        data_cal_delta += double.parse((healthDataCal[j].value as WorkoutHealthValue).totalEnergyBurned.toString());
       }
       if (data_cal_delta != 0.0) {
         data_cal.add(data_cal_delta);
@@ -99,8 +99,6 @@ class _Data extends State {
       }
       startdata = startdata.add(Duration(days: 1));
     }
-    print(data_cal);
-    print(date_cal);
   }
 
   Future fetchData() async {
@@ -758,7 +756,7 @@ class _Data extends State {
                                           Column(
                                             children: [
                                               Text(
-                                                  text_steps[0].toString() + ' ккал',
+                                                  text_cal[0].toString() + ' ккал',
                                                   textAlign: TextAlign.center,
 
                                                   style: TextStyle(
@@ -768,7 +766,7 @@ class _Data extends State {
                                                   )
                                               ),
                                               Text(
-                                                  text_steps[1],
+                                                  text_cal[1],
                                                   textAlign: TextAlign.center,
 
                                                   style: TextStyle(

@@ -9,6 +9,7 @@ import 'package:health/health.dart';
 import 'package:health_example/util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
+import 'mat_model.dart';
 
 
 
@@ -49,6 +50,7 @@ class _Home_page extends State {
   String heart_value_time = '';
   String blood_time = '';
   double distance = 0;
+  int _general_state = 0;
 
   static final types = dataTypesAndroid;
 
@@ -134,6 +136,7 @@ class _Home_page extends State {
         distance += double.parse(_healthDataList[i].value.toString());
       }
     }
+
   }
 
 
@@ -170,6 +173,66 @@ class _Home_page extends State {
     }
   }
 
+  Future fetchGeneralState() async{
+    List<List<double>> data = [];
+    List<double> heart = [];
+    List<double> sleep = [];
+    List<double> steps = [];
+
+    final now1 = DateTime.now();
+    DateTime startdata1 = DateTime(now1.year, now1.month, now1.day).subtract(Duration(days: 30));
+
+    for (int i = 0; i < 30; i++) {
+      DateTime endSteps = startdata1.add(Duration(days: 1)).isBefore(now1) ? startdata1.add(Duration(days: 1)) : now1;
+      List<HealthDataPoint> heartdata = await health.getHealthDataFromTypes(startdata1, endSteps, [HealthDataType.HEART_RATE]);
+      for (int j = 0; j < heartdata.length; j++) {
+        heart.add(double.parse(heartdata[j].value.toString()));
+      }
+      startdata1 = startdata1.add(Duration(days: 1));
+    }
+
+    final now3 = DateTime.now();
+    DateTime startdata3 = DateTime(now3.year, now3.month, now3.day).subtract(Duration(days: 30));
+
+    for (int i = 0; i < 30; i++) {
+      DateTime endSteps = startdata3.add(Duration(days: 1)).isBefore(now3) ? startdata3.add(Duration(days: 1)) : now3;
+      List<HealthDataPoint> sleepdata = await health.getHealthDataFromTypes(startdata3, endSteps, [HealthDataType.SLEEP_SESSION]);
+      double sleep_delta = 0.0;
+      for (int j = 0; j < sleepdata.length; j++) {
+        sleep_delta += double.parse(sleepdata[j].value.toString());
+      }
+      if (sleep_delta != 0.0) {
+        sleep.add(sleep_delta / 60.0);
+      }
+      startdata3 = startdata3.add(Duration(days: 1));
+    }
+
+    final now2 = DateTime.now();
+    DateTime startdata2 = DateTime(now2.year, now2.month, now2.day).subtract(Duration(days: 30));
+    bool stepsPermission =
+        await health.hasPermissions([HealthDataType.STEPS]) ?? false;
+    if (!stepsPermission) {
+      stepsPermission =
+      await health.requestAuthorization([HealthDataType.STEPS]);
+    }
+    if (stepsPermission) {
+      for (int i = 0; i < 30; i++) {
+        DateTime endSteps = startdata2.add(Duration(days: 1)).isBefore(now2) ? startdata2.add(Duration(days: 1)) : now2;
+        int? steps_delta = await health.getTotalStepsInInterval(startdata2, endSteps);
+        if (steps_delta!.toDouble() != 0.0) {
+          steps.add(steps_delta!.toDouble());
+        }
+        startdata2 = startdata2.add(Duration(days: 1));
+      }
+    }
+
+    data.add(heart);
+    data.add(sleep);
+    data.add(steps);
+
+    print(data);
+    _general_state = get_general_state(data);
+  }
 
   Widget _contentFetchingData() {
     return Column(
@@ -188,6 +251,12 @@ class _Home_page extends State {
   Future<void> _refreshData() async {
     fetchData();
     fetchStepData();
+    fetchGeneralState();
+    // Future.delayed(Duration(milliseconds: 3000), () {
+    //   setState(() {
+    //
+    //   });
+    // });
   }
 
 
@@ -250,7 +319,7 @@ class _Home_page extends State {
               mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 20,),
-              Container(
+              _general_state != 0 ? Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
@@ -299,7 +368,7 @@ class _Home_page extends State {
                     Row(
                         children: [
                           SizedBox(width: 15.0),
-                          Text("20", style:
+                          Text(_general_state.toString(), style:
                           TextStyle(
                             color: Colors.black,
                             fontSize: 25,
@@ -313,7 +382,7 @@ class _Home_page extends State {
                       width: MediaQuery.of(context).size.width * 0.82,
                       child:
                         LinearProgressIndicator(
-                            value: 0.2,
+                            value: _general_state / 100.0,
                             backgroundColor: Color(0xFFFFDEDE),
                             valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF7171)),
                             minHeight: 20.0,
@@ -350,7 +419,7 @@ class _Home_page extends State {
                     )
                   ]
                 )
-              ),
+              ) : Container(),
               SizedBox(height: 16),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
