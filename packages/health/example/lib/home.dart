@@ -87,7 +87,7 @@ class _Home_page extends State {
 
   Future fetchData() async {
 
-    await authorize();
+    authorize();
 
     setState(() => _state = AppState.FETCHING_DATA);
 
@@ -231,6 +231,7 @@ class _Home_page extends State {
     data.add(steps);
 
     print(data);
+    print('general' + _general_state.toString());
     _general_state = get_general_state(data);
   }
 
@@ -251,12 +252,11 @@ class _Home_page extends State {
   Future<void> _refreshData() async {
     fetchData();
     fetchStepData();
-    fetchGeneralState();
-    // Future.delayed(Duration(milliseconds: 3000), () {
-    //   setState(() {
-    //
-    //   });
-    // });
+    Future.delayed(Duration(milliseconds: 2000), () {
+      setState(() {
+        fetchGeneralState();
+      });
+    });
   }
 
 
@@ -282,7 +282,7 @@ class _Home_page extends State {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Ингосздрав",
+                Text("Хуй",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -360,7 +360,6 @@ class _Home_page extends State {
                                 color: Colors.grey,
                               )),
                         )
-
                       ],
                     ),
                     SizedBox(height: 10.0),

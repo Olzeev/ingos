@@ -25,8 +25,14 @@ class _Login extends State {
     var number_insurance = "";
     var birthday = "";
     var name = user!.displayName?.split(' ')[0];
-    var surname = user!.displayName?.split(' ')[1];
+    var surname;
+    if((user!.displayName?.split(' ').length)! > 1) {
+      surname = user!.displayName?.split(' ')[1];
+    } else {
+      surname = '';
+    }
     var thirdname = '';
+    // var name = user!.displayName?.split(' ')[0];
 
     Future<String> _loadText1Asset() async {
       return await rootBundle.loadString('assets/text_files/consent_to_the_processing_of_personal_data.txt');
